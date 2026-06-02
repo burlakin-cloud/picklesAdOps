@@ -1,25 +1,22 @@
-"""
-fetcher.py — сбор данных и отправка дайджеста в Telegram.
-Запускается ежедневно через GitHub Actions или cron.
-"""
+cat > /home/pickles_ads/fetcher.py << 'ENDOFFILE'
+import sys
 import json
 import logging
 import os
 import requests
 from datetime import date, timedelta
-import sys
 from dotenv import load_dotenv
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
+NO_TELEGRAM   = "--no-telegram"   in sys.argv
+TELEGRAM_ONLY = "--telegram-only" in sys.argv
+
 from channels import ALL_CHANNELS
 import db
 
-# ══════════════════════════════════════════════════════════════════════════════
-# ПОРОГИ АНОМАЛИЙ
-# ══════════════════════════════════════════════════════════════════════════════
 THRESHOLDS = {
     "spend":  {"warn": 0.20, "crit": 0.30},
     "ctr":    {"warn": 0.15, "crit": 0.20},
@@ -27,14 +24,13 @@ THRESHOLDS = {
     "leads":  {"warn": 0.15, "crit": 0.20},
 }
 
-TODAY     = date.today()
-YESTERDAY = (TODAY - timedelta(days=1)).isoformat()
+TODAY      = date.today()
+YESTERDAY  = (TODAY - timedelta(days=1)).isoformat()
 DAY_BEFORE = (TODAY - timedelta(days=2)).isoformat()
 
 
 def pct_change(new, old):
     return None if old == 0 else (new - old) / old
-
 
 def flag(metric, delta):
     if delta is None:
@@ -49,12 +45,10 @@ def flag(metric, delta):
         return " ⚠️"
     return ""
 
-
 def fmt_delta(delta):
     if delta is None:
         return "—"
     return f"{'+'if delta>=0 else ''}{delta*100:.1f}%"
-
 
 def metrics_lines(y, p):
     d_spend = pct_change(y["spend"], p["spend"])
@@ -70,15 +64,13 @@ def metrics_lines(y, p):
         f"└ CPA:     `{y['cpa']:,.2f} $`\n"
     )
 
-
 def has_flags(y, p):
     for m in ("spend", "ctr", "cpc", "leads"):
         if flag(m, pct_change(y[m], p[m])):
             return True
     return False
 
-
-def send_telegram(chat_id: str, text: str):
+def send_telegram(chat_id, text):
     token = os.environ.get("TG_BOT_TOKEN")
     if not token:
         log.warning("TG_BOT_TOKEN не задан")
@@ -91,15 +83,14 @@ def send_telegram(chat_id: str, text: str):
             timeout=15
         )
         r.raise_for_status()
+        log.info("Telegram отправлен ✓")
     except Exception as e:
         log.error(f"Telegram error: {e}")
 
-
-def process_client(client: dict):
+def process_client(client):
     cid = client["id"]
     log.info(f"== {client['name']} ==")
 
-    # Собираем данные по каждому каналу (пропускаем если --telegram-only)
     if not TELEGRAM_ONLY:
         for key, channel in ALL_CHANNELS.items():
             if not channel.is_configured(client):
@@ -114,28 +105,27 @@ def process_client(client: dict):
                     db.upsert_campaigns(cid, key, d, camps)
 
     if NO_TELEGRAM:
-        log.info(f"  Telegram пропущен (--no-telegram)")
+        log.info("  Telegram пропущен")
         return
 
-    # Строим и отправляем Telegram
-    today_data    = db.get_account_metrics(cid, YESTERDAY)
+    today_data     = db.get_account_metrics(cid, YESTERDAY)
     yesterday_data = db.get_account_metrics(cid, DAY_BEFORE)
+    yest_by_ch     = {r["channel"]: r for r in yesterday_data}
 
-    yest_by_ch = {r["channel"]: r for r in yesterday_data}
     blocks = []
     for row in today_data:
         ch   = row["channel"]
         chan = ALL_CHANNELS.get(ch)
         if not chan:
             continue
-        p = yest_by_ch.get(ch, {k: 0.0 for k in row})
+        p      = yest_by_ch.get(ch, {k: 0.0 for k in row})
         status = "🔴" if has_flags(row, p) else "🟢"
         blocks.append(f"{status} *{chan.icon} {chan.name}*\n{metrics_lines(row, p)}")
 
     if not blocks:
+        log.warning(f"  Нет данных для Telegram")
         return
 
-    # Сообщение 1 — сводка
     msg1 = (
         f"📊 *{client['name']}*\n"
         f"📅 {YESTERDAY} vs {DAY_BEFORE}\n"
@@ -144,7 +134,6 @@ def process_client(client: dict):
     )
     send_telegram(client["telegram_chat_id"], msg1)
 
-    # Сообщение 2 — кампании (только каналы с флагами)
     camp_blocks = []
     for ch, chan in ALL_CHANNELS.items():
         if not chan.is_configured(client):
@@ -155,7 +144,7 @@ def process_client(client: dict):
             continue
         camp_blocks.append(f"*{chan.icon} {chan.name}*")
         for c in camps_today:
-            p = camps_yest.get(c["id"], {k: 0.0 for k in c})
+            p  = camps_yest.get(c["id"], {k: 0.0 for k in c})
             st = "🔴" if has_flags(c, p) else "🟢"
             camp_blocks.append(f"{st} *{c['name']}*\n{metrics_lines(c, p)}")
 
@@ -181,3 +170,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+ENDOFFILE
