@@ -98,12 +98,25 @@ def api_trend(client_id):
 
 @app.route("/api/fetch", methods=["POST"])
 def api_fetch():
-    """Ручной запуск фетчера. Защищён токеном."""
+    """Обновить данные из API (без отправки в Telegram)."""
     token = request.headers.get("X-Admin-Token", "")
     if token != ADMIN_TOKEN:
         abort(403)
     try:
-        subprocess.Popen(["python", "fetcher.py"])
+        subprocess.Popen(["python", "fetcher.py", "--no-telegram"])
+        return jsonify({"status": "started"})
+    except Exception as e:
+        return jsonify({"status": "error", "detail": str(e)}), 500
+
+
+@app.route("/api/send_telegram", methods=["POST"])
+def api_send_telegram():
+    """Отправить отчёт в Telegram из текущих данных в БД."""
+    token = request.headers.get("X-Admin-Token", "")
+    if token != ADMIN_TOKEN:
+        abort(403)
+    try:
+        subprocess.Popen(["python", "fetcher.py", "--telegram-only"])
         return jsonify({"status": "started"})
     except Exception as e:
         return jsonify({"status": "error", "detail": str(e)}), 500
