@@ -1,0 +1,29 @@
+[
+  {
+    "id": "client_a",
+    "name": "Client A — E-commerce",
+    "telegram_chat_id": "-100123456789",
+    "channels": {
+      "google_ads": {
+        "customer_id": "1234567890",
+        "login_customer_id": "9876543210"
+      },
+      "meta_ads": {
+        "ad_account_id": "act_123456789"
+      },
+      "yandex": {
+        "client_login": "client-a-direct"
+      }
+    }
+  },
+  {
+    "id": "client_b",
+    "name": "Client B — Lead Gen",
+    "telegram_chat_id": "-100987654321",
+    "channels": {
+      "google_ads": {
+        "customer_id": "9876543210"
+      }
+    }
+  }
+]
