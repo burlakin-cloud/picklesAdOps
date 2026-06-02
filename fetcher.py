@@ -7,6 +7,7 @@ import logging
 import os
 import requests
 from datetime import date, timedelta
+import sys
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -98,18 +99,23 @@ def process_client(client: dict):
     cid = client["id"]
     log.info(f"== {client['name']} ==")
 
-    # Собираем данные по каждому каналу
-    for key, channel in ALL_CHANNELS.items():
-        if not channel.is_configured(client):
-            continue
-        log.info(f"  {channel.name}...")
-        for d in [YESTERDAY, DAY_BEFORE]:
-            acc = channel.fetch_account(client, d)
-            if acc:
-                db.upsert_account(cid, key, d, acc)
-            camps = channel.fetch_campaigns(client, d)
-            if camps:
-                db.upsert_campaigns(cid, key, d, camps)
+    # Собираем данные по каждому каналу (пропускаем если --telegram-only)
+    if not TELEGRAM_ONLY:
+        for key, channel in ALL_CHANNELS.items():
+            if not channel.is_configured(client):
+                continue
+            log.info(f"  {channel.name}...")
+            for d in [YESTERDAY, DAY_BEFORE]:
+                acc = channel.fetch_account(client, d)
+                if acc:
+                    db.upsert_account(cid, key, d, acc)
+                camps = channel.fetch_campaigns(client, d)
+                if camps:
+                    db.upsert_campaigns(cid, key, d, camps)
+
+    if NO_TELEGRAM:
+        log.info(f"  Telegram пропущен (--no-telegram)")
+        return
 
     # Строим и отправляем Telegram
     today_data    = db.get_account_metrics(cid, YESTERDAY)
