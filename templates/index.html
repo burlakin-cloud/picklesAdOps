@@ -74,7 +74,8 @@ tr:hover td{background:var(--bg)}
     <input type="date" id="date-main" onchange="load()">
     <span style="color:var(--muted);font-size:12px">vs</span>
     <input type="date" id="date-compare" onchange="load()">
-    <button onclick="fetchNow()" id="fetch-btn">⟳ Обновить данные</button>
+    <button onclick="fetchData()" id="fetch-btn">⟳ Обновить данные</button>
+    <button onclick="sendTelegram()" id="tg-btn" style="background:#229ED9;border-color:#229ED9;color:#fff">✈ Отправить в Telegram</button>
   </div>
 
   <div id="summary-metrics" class="metrics-grid"></div>
@@ -305,24 +306,41 @@ function renderChannelDetail(ch, camps) {
   </div>`;
 }
 
-async function fetchNow() {
-  const btn = $('fetch-btn');
-  btn.textContent = '⏳ Запущено...';
+let adminToken = null;
+function getToken() {
+  if (!adminToken) adminToken = prompt('Admin token:');
+  return adminToken;
+}
+
+async function apiAction(endpoint, btnId, labels) {
+  const btn = $(btnId);
+  const token = getToken();
+  if (!token) return;
+  btn.textContent = labels.loading;
   btn.disabled = true;
   try {
-    const token = prompt('Admin token:');
-    if (!token) { btn.textContent='⟳ Обновить данные'; btn.disabled=false; return; }
-    const r = await fetch('/api/fetch', {
-      method:'POST',
-      headers:{'X-Admin-Token': token}
+    const r = await fetch(endpoint, {
+      method: 'POST',
+      headers: {'X-Admin-Token': token}
     });
     if (r.ok) {
-      btn.textContent='✓ Запущено';
-      setTimeout(()=>{ btn.textContent='⟳ Обновить данные'; btn.disabled=false; load(); }, 10000);
+      btn.textContent = labels.ok;
+      setTimeout(() => { btn.textContent = labels.default; btn.disabled = false; load(); }, 8000);
     } else {
-      btn.textContent='✗ Ошибка'; btn.disabled=false;
+      adminToken = null;
+      btn.textContent = '✗ Ошибка'; btn.disabled = false;
     }
-  } catch(e) { btn.textContent='✗ Ошибка'; btn.disabled=false; }
+  } catch(e) { btn.textContent = '✗ Ошибка'; btn.disabled = false; }
+}
+
+function fetchData() {
+  apiAction('/api/fetch', 'fetch-btn',
+    {loading: '⏳ Загружаю...', ok: '✓ Данные обновлены', default: '⟳ Обновить данные'});
+}
+
+function sendTelegram() {
+  apiAction('/api/send_telegram', 'tg-btn',
+    {loading: '⏳ Отправляю...', ok: '✓ Отправлено', default: '✈ Отправить в Telegram'});
 }
 
 loadClients();
