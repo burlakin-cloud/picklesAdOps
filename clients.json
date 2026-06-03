@@ -11,6 +11,7 @@
       },
       "meta_ads": {
         "ad_account_id": "act_123456789"
+        "currency": "USD"
       },
       "yandex": {
         "client_login": "teampickles"
