@@ -13,69 +13,97 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sidebar-section{padding:12px 14px 4px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .client-item{padding:8px 14px;cursor:pointer;border-radius:6px;margin:1px 6px;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}
 .client-item:hover{background:var(--bg)}.client-item.active{background:#EAF3DE;color:#27500A;font-weight:500}
-.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--ok)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
 .main{flex:1;overflow-y:auto;padding:20px}
-.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.title{font-size:17px;font-weight:600;flex:1;min-width:120px}
-.mode-group{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
-.mode-btn{padding:5px 12px;background:var(--surface);border:none;font-size:12px;color:var(--muted);cursor:pointer;border-right:1px solid var(--border)}
-.mode-btn:last-child{border-right:none}
-.mode-btn.active{background:var(--accent);color:#fff}
-.date-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-input[type=date]{padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:13px;color:var(--text)}
-.vs{font-size:11px;color:var(--muted)}
-button.action{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:13px;color:var(--text);cursor:pointer;white-space:nowrap}
-button.action:hover{background:var(--bg)}
-button.action:disabled{opacity:.6;cursor:not-allowed}
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.page-title{font-size:17px;font-weight:600;flex:1}
+
+/* Date picker trigger */
+.dp-wrap{position:relative}
+.dp-trigger{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:13px;color:var(--text);white-space:nowrap}
+.dp-trigger:hover{background:var(--bg)}
+.dp-trigger svg{width:14px;height:14px;stroke:var(--muted);fill:none;flex-shrink:0;stroke-width:1.8}
+
+/* Dropdown */
+.dp-dd{position:absolute;top:calc(100% + 6px);left:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.12);z-index:200;overflow:hidden;display:none;width:580px}
+.dp-dd.open{display:flex;flex-direction:column}
+.dp-main{display:flex}
+.dp-presets{width:180px;border-right:1px solid var(--border);padding:8px 0;flex-shrink:0}
+.dp-preset{padding:8px 16px;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.dp-preset:hover{background:var(--bg)}
+.dp-preset.sel{color:var(--accent);font-weight:500;background:#EAF3FB}
+.dp-right{padding:16px;flex:1}
+.dp-months{display:flex;gap:20px}
+.dp-mon{flex:1}
+.dp-mon-name{font-size:11px;font-weight:500;text-align:center;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.dp-wds,.dp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.dp-wds{margin-bottom:2px}
+.dp-wd{font-size:11px;color:var(--muted);text-align:center;padding:3px 0}
+.dp-d{font-size:12px;text-align:center;padding:5px 2px;border-radius:4px;cursor:pointer;color:var(--text)}
+.dp-d:hover:not(.dp-empty):not(.dp-other){background:var(--bg)}
+.dp-d.in-range{background:#EAF3FB;color:var(--accent)}
+.dp-d.range-start,.dp-d.range-end{background:var(--accent);color:#fff;font-weight:500;border-radius:6px}
+.dp-d.dp-other{color:#ccc;cursor:default}
+.dp-d.dp-empty{cursor:default}
+.dp-d.dp-today{font-weight:700}
+.dp-cmp{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--border);flex-wrap:wrap}
+.dp-cmp label{font-size:13px;color:var(--muted)}
+.dp-cmp select{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text)}
+.dp-cmp-range{font-size:12px;color:var(--muted)}
+.dp-footer{display:flex;justify-content:flex-end;gap:8px;padding:10px 16px;border-top:1px solid var(--border)}
+.dp-cancel{padding:6px 14px;font-size:13px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer}
+.dp-apply{padding:6px 14px;font-size:13px;border:none;border-radius:6px;background:var(--accent);color:#fff;cursor:pointer;font-weight:500}
+
+button.act{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:13px;color:var(--text);cursor:pointer;white-space:nowrap}
+button.act:hover{background:var(--bg)}
+button.act:disabled{opacity:.6;cursor:not-allowed}
 button.tg{background:#229ED9;border-color:#229ED9;color:#fff}
 button.tg:hover{background:#1a8fc7}
-.metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:16px}
-.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
-.metric-label{font-size:11px;color:var(--muted);margin-bottom:4px}
-.metric-value{font-size:20px;font-weight:600}
-.metric-delta{font-size:12px;margin-top:2px}
-.delta-ok{color:var(--ok)}.delta-warn{color:var(--warn)}.delta-danger{color:var(--danger)}.delta-neutral{color:var(--muted)}
+
+.pbar{height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-bottom:12px;display:none}
+.pfill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;width:0}
+
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:16px}
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.ml{font-size:11px;color:var(--muted);margin-bottom:4px}
+.mv{font-size:20px;font-weight:600}
+.md{font-size:12px;margin-top:2px}
+.dok{color:var(--ok)}.dwn{color:var(--warn)}.dbd{color:var(--danger)}.dne{color:var(--muted)}
 .tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .tab{padding:5px 14px;border:1px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;background:var(--surface)}
 .tab:hover{background:var(--bg)}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px}
-.card-title{font-weight:600;font-size:14px;margin-bottom:12px}
+.ct{font-weight:600;font-size:14px;margin-bottom:12px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;padding:7px 10px;color:var(--muted);font-weight:400;border-bottom:1px solid var(--border)}
 td{padding:8px 10px;border-bottom:1px solid var(--border)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg)}
+tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg)}
 .badge{font-size:11px;padding:2px 8px;border-radius:12px;font-weight:500}
-.badge-ok{background:#E1F5EE;color:#0F6E56}.badge-danger{background:#FCEBEB;color:#A32D2D}
+.bok{background:#E1F5EE;color:#0F6E56}.bbd{background:#FCEBEB;color:#A32D2D}
 .empty{color:var(--muted);text-align:center;padding:32px;font-size:13px}
-.ch-block{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
-.ch-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.ch-header{font-weight:600;font-size:14px;margin-bottom:10px}
-.ch-metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px}
-.ch-metric{background:var(--bg);border-radius:8px;padding:8px 10px}
-.ch-metric-label{font-size:10px;color:var(--muted);margin-bottom:2px}
-.ch-metric-value{font-size:13px;font-weight:600}
+.chb{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.chb:last-child{border-bottom:none;margin:0;padding:0}
+.chh{font-weight:600;font-size:14px;margin-bottom:10px}
+.chm{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px}
+.chmb{background:var(--bg);border-radius:8px;padding:8px 10px}
+.chml{font-size:10px;color:var(--muted);margin-bottom:2px}
+.chmv{font-size:13px;font-weight:600}
 
-/* Modal */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:14px;padding:24px;width:420px;max-width:95vw}
 .modal h3{font-size:16px;font-weight:600;margin-bottom:16px}
-.modal-section{margin-bottom:16px}
-.modal-section label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
-.modal-dates{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px}
-.modal-dates span{color:var(--muted);font-size:11px;display:block;margin-bottom:2px}
-.modal-dates strong{font-size:13px}
-.check-list{display:flex;flex-direction:column;gap:8px}
-.check-item{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:8px}
-.check-item:hover{background:var(--bg)}
-.check-item input{width:16px;height:16px;cursor:pointer;accent-color:var(--accent)}
-.modal-actions{display:flex;gap:8px;margin-top:20px}
-.modal-actions button{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);font-size:14px;cursor:pointer}
-.btn-send{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
-.btn-send:hover{opacity:.9}
-.btn-cancel{background:var(--surface)}
-.btn-cancel:hover{background:var(--bg)}
+.msec{margin-bottom:16px}
+.msec .slbl{font-size:12px;color:var(--muted);display:block;margin-bottom:8px}
+.period-box{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:13px}
+.chklist{display:flex;flex-direction:column;gap:6px}
+.chkitem{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;padding:9px 12px;border:1px solid var(--border);border-radius:8px}
+.chkitem:hover{background:var(--bg)}
+.chkitem input{width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
+.mact{display:flex;gap:8px;margin-top:20px}
+.mact button{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);font-size:14px;cursor:pointer}
+.msend{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.mcancel{background:var(--surface)}
 </style>
 </head>
 <body>
@@ -83,360 +111,388 @@ tr:hover td{background:var(--bg)}
 <div class="sidebar">
   <div class="logo">📊 Pickles Ads</div>
   <div class="sidebar-section">Клиенты</div>
-  <div id="client-list"></div>
+  <div id="client-list"><div style="padding:12px;font-size:12px;color:var(--muted)">Загрузка...</div></div>
 </div>
 
 <div class="main">
   <div class="toolbar">
-    <div class="title" id="client-title">Выбери клиента</div>
+    <div class="page-title" id="page-title">Выбери клиента</div>
 
-    <div class="mode-group">
-      <button class="mode-btn active" onclick="setMode('day')"   id="mode-day">День</button>
-      <button class="mode-btn"        onclick="setMode('week')"  id="mode-week">Неделя</button>
-      <button class="mode-btn"        onclick="setMode('month')" id="mode-month">Месяц</button>
-      <button class="mode-btn"        onclick="setMode('range')" id="mode-range">Диапазон</button>
-    </div>
+    <div class="dp-wrap" id="dp-wrap">
+      <div class="dp-trigger" id="dp-trigger" onclick="dpToggle()">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span id="dp-label">Вчера</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
 
-    <div class="date-row" id="date-row">
-      <input type="date" id="date-main"    onchange="onDateChange()">
-      <span class="vs">vs</span>
-      <input type="date" id="date-compare" onchange="onDateChange()">
-    </div>
-
-    <button class="action" onclick="fetchData()" id="fetch-btn">⟳ Обновить</button>
-    <button class="action tg" onclick="openTgModal()" id="tg-btn">✈ В Telegram</button>
-  </div>
-
-  <div id="summary-metrics" class="metrics-grid"></div>
-  <div class="tabs" id="channels-tabs"></div>
-  <div id="main-content"><div class="empty">Выбери клиента слева</div></div>
-</div>
-
-<!-- Telegram modal -->
-<div class="modal-overlay" id="tg-modal" onclick="if(event.target===this)closeTgModal()">
-  <div class="modal">
-    <h3>✈ Отправить отчёт в Telegram</h3>
-
-    <div class="modal-section">
-      <label>Период отчёта</label>
-      <div class="modal-dates">
-        <div><span>Основной</span><strong id="modal-date-from">—</strong> — <strong id="modal-date-to">—</strong></div>
-        <div><span>Сравнение</span><strong id="modal-cmp-from">—</strong> — <strong id="modal-cmp-to">—</strong></div>
+      <div class="dp-dd" id="dp-dd">
+        <div class="dp-main">
+          <div class="dp-presets" id="dp-presets"></div>
+          <div class="dp-right" id="dp-right" style="display:none">
+            <div class="dp-months" id="dp-months"></div>
+          </div>
+        </div>
+        <div class="dp-cmp">
+          <input type="checkbox" id="cmp-on" checked onchange="dpCmpChange()">
+          <label for="cmp-on">Сравнить с</label>
+          <select id="cmp-sel" onchange="dpCmpChange()">
+            <option value="prev">Предыдущим периодом</option>
+            <option value="month">Прошлым месяцем</option>
+            <option value="year">Прошлым годом</option>
+          </select>
+          <span class="dp-cmp-range" id="cmp-range-lbl"></span>
+        </div>
+        <div class="dp-footer">
+          <button class="dp-cancel" onclick="dpClose()">Отмена</button>
+          <button class="dp-apply" onclick="dpApply()">Применить</button>
+        </div>
       </div>
     </div>
 
-    <div class="modal-section">
-      <label>Что включить в отчёт</label>
-      <div class="check-list" id="modal-sections"></div>
-    </div>
+    <button class="act" id="fetch-btn" onclick="doFetch()">⟳ Обновить</button>
+    <button class="act tg" onclick="tgOpen()">✈ В Telegram</button>
+  </div>
 
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeTgModal()">Отмена</button>
-      <button class="btn-send"   onclick="doSendTelegram()" id="modal-send-btn">Отправить</button>
+  <div class="pbar" id="pbar"><div class="pfill" id="pfill"></div></div>
+  <div class="mg" id="sum-metrics"></div>
+  <div class="tabs" id="chan-tabs"></div>
+  <div id="content"><div class="empty">Выбери клиента слева</div></div>
+</div>
+
+<div class="modal-bg" id="tg-modal" onclick="if(event.target===this)tgClose()">
+  <div class="modal">
+    <h3>✈ Отправить в Telegram</h3>
+    <div class="msec"><span class="slbl">Период</span><div class="period-box" id="tg-period">—</div></div>
+    <div class="msec"><span class="slbl">Что включить</span><div class="chklist" id="tg-sections"></div></div>
+    <div class="mact">
+      <button class="mcancel" onclick="tgClose()">Отмена</button>
+      <button class="msend" id="tg-send-btn" onclick="tgSend()">Отправить</button>
     </div>
   </div>
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-let clients = [], activeClient = null, activeChannel = 'all', adminToken = null;
-let currentMode = 'day';
-let dateFrom, dateTo, compareFrom, compareTo;
+const $=id=>document.getElementById(id);
+const RUM=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const RUG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
-function isoDate(d){ return d.toISOString().split('T')[0]; }
-function addDays(d, n){ const r=new Date(d); r.setDate(r.getDate()+n); return r; }
-function startOfWeek(d){ const r=new Date(d); r.setDate(r.getDate()-((r.getDay()+6)%7)); return r; }
-function startOfMonth(d){ return new Date(d.getFullYear(), d.getMonth(), 1); }
-function endOfMonth(d){ return new Date(d.getFullYear(), d.getMonth()+1, 0); }
+let clients=[], active=null, activeCh='all', token=null;
+let dFrom='', dTo='', cFrom='', cTo='';
+let pFrom=null, pTo=null;
+let dpPreset='yesterday';
+let dpViewY, dpViewM;
 
-function initDates(){
-  const today = new Date();
-  const yest  = addDays(today, -1);
-  const day2  = addDays(today, -2);
-  dateFrom = compareFrom = isoDate(yest);
-  dateTo   = isoDate(yest);
-  compareTo = isoDate(day2);
-  updateDateUI();
-}
+function isoD(d){return d.toISOString().split('T')[0];}
+function addD(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
+function parseD(s){return new Date(s+'T00:00:00');}
+function fmtLbl(s){const d=parseD(s);return `${d.getDate()} ${RUG[d.getMonth()]} ${d.getFullYear()}`;}
+function fmtRng(f,t){return f===t?fmtLbl(f):`${fmtLbl(f)} — ${fmtLbl(t)}`;}
 
-function setMode(mode){
-  currentMode = mode;
-  ['day','week','month','range'].forEach(m => {
-    $(`mode-${m}`).classList.toggle('active', m===mode);
-  });
-  const today = new Date();
-  const yest  = addDays(today,-1);
+const PRESETS=[
+  {k:'today',    l:'Сегодня'},
+  {k:'yesterday',l:'Вчера'},
+  {k:'last7',    l:'Последние 7 дней'},
+  {k:'last14',   l:'Последние 14 дней'},
+  {k:'last30',   l:'Последние 30 дней'},
+  {k:'last90',   l:'Последние 90 дней'},
+  {k:'this_month',l:'Этот месяц'},
+  {k:'last_month',l:'Прошлый месяц'},
+  {k:'this_year', l:'Этот год'},
+  {k:'custom',    l:'Произвольный'},
+];
 
-  const row = $('date-row');
-
-  if(mode==='day'){
-    row.innerHTML = `
-      <input type="date" id="date-main"    onchange="onDateChange()">
-      <span class="vs">vs</span>
-      <input type="date" id="date-compare" onchange="onDateChange()">`;
-    $('date-main').value    = isoDate(yest);
-    $('date-compare').value = isoDate(addDays(today,-2));
-    onDateChange();
-  } else if(mode==='week'){
-    const mon = startOfWeek(yest);
-    const sun = addDays(mon, 6);
-    row.innerHTML = `<span style="font-size:13px">Неделя:</span>
-      <input type="date" id="date-main" onchange="onDateChange()">`;
-    $('date-main').value = isoDate(mon);
-    onDateChange();
-  } else if(mode==='month'){
-    row.innerHTML = `<span style="font-size:13px">Месяц:</span>
-      <input type="month" id="date-main" onchange="onDateChange()">`;
-    $('date-main').value = isoDate(today).slice(0,7);
-    onDateChange();
-  } else if(mode==='range'){
-    row.innerHTML = `
-      <input type="date" id="date-from" onchange="onDateChange()">
-      <span class="vs">—</span>
-      <input type="date" id="date-to"   onchange="onDateChange()">
-      <span class="vs">vs</span>
-      <input type="date" id="cmp-from"  onchange="onDateChange()">
-      <span class="vs">—</span>
-      <input type="date" id="cmp-to"    onchange="onDateChange()">`;
-    $('date-from').value = isoDate(addDays(today,-7));
-    $('date-to').value   = isoDate(yest);
-    $('cmp-from').value  = isoDate(addDays(today,-14));
-    $('cmp-to').value    = isoDate(addDays(today,-8));
-    onDateChange();
+function presetRange(k){
+  const t=new Date(); t.setHours(0,0,0,0);
+  const y=addD(t,-1);
+  switch(k){
+    case 'today':      return {f:isoD(t),  t:isoD(t)};
+    case 'yesterday':  return {f:isoD(y),  t:isoD(y)};
+    case 'last7':      return {f:isoD(addD(t,-7)), t:isoD(y)};
+    case 'last14':     return {f:isoD(addD(t,-14)),t:isoD(y)};
+    case 'last30':     return {f:isoD(addD(t,-30)),t:isoD(y)};
+    case 'last90':     return {f:isoD(addD(t,-90)),t:isoD(y)};
+    case 'this_month': return {f:isoD(new Date(t.getFullYear(),t.getMonth(),1)),t:isoD(y)};
+    case 'last_month': {
+      const fm=new Date(t.getFullYear(),t.getMonth()-1,1);
+      return {f:isoD(fm),t:isoD(new Date(t.getFullYear(),t.getMonth(),0))};
+    }
+    case 'this_year':  return {f:`${t.getFullYear()}-01-01`,t:isoD(y)};
+    default: return {f:isoD(y),t:isoD(y)};
   }
 }
 
-function onDateChange(){
-  const today = new Date();
-  const yest  = addDays(today,-1);
-
-  if(currentMode==='day'){
-    dateFrom    = $('date-main')?.value || isoDate(yest);
-    dateTo      = dateFrom;
-    compareFrom = $('date-compare')?.value || isoDate(addDays(today,-2));
-    compareTo   = compareFrom;
-  } else if(currentMode==='week'){
-    const mon = new Date($('date-main').value+'T00:00:00');
-    const sun = addDays(mon,6);
-    const prevMon = addDays(mon,-7);
-    const prevSun = addDays(mon,-1);
-    dateFrom=isoDate(mon); dateTo=isoDate(sun);
-    compareFrom=isoDate(prevMon); compareTo=isoDate(prevSun);
-  } else if(currentMode==='month'){
-    const val = $('date-main').value;
-    const d = new Date(val+'-01');
-    const prevD = new Date(d.getFullYear(), d.getMonth()-1, 1);
-    dateFrom=isoDate(startOfMonth(d)); dateTo=isoDate(endOfMonth(d));
-    compareFrom=isoDate(startOfMonth(prevD)); compareTo=isoDate(endOfMonth(prevD));
-  } else if(currentMode==='range'){
-    dateFrom    = $('date-from')?.value || '';
-    dateTo      = $('date-to')?.value   || dateFrom;
-    compareFrom = $('cmp-from')?.value  || '';
-    compareTo   = $('cmp-to')?.value    || compareFrom;
-  }
-  load();
+function cmpRange(f,t,mode){
+  const df=parseD(f),dt=parseD(t);
+  const days=Math.round((dt-df)/86400000);
+  if(mode==='prev'){return {cf:isoD(addD(df,-(days+1))),ct:isoD(addD(df,-1))};}
+  if(mode==='month'){return {cf:isoD(new Date(df.getFullYear(),df.getMonth()-1,df.getDate())),ct:isoD(new Date(dt.getFullYear(),dt.getMonth()-1,dt.getDate()))};}
+  return {cf:isoD(new Date(df.getFullYear()-1,df.getMonth(),df.getDate())),ct:isoD(new Date(dt.getFullYear()-1,dt.getMonth(),dt.getDate()))};
 }
 
-function updateDateUI(){ initDates(); }
+function dpInit(){
+  const r=presetRange('yesterday');
+  dFrom=r.f; dTo=r.t;
+  dpPreset='yesterday';
+  dpUpdCmp();
+  dpUpdLabel();
+  const now=new Date();
+  dpViewY=now.getFullYear(); dpViewM=now.getMonth()-1;
+  if(dpViewM<0){dpViewM=11;dpViewY--;}
+  dpRenderPresets();
+}
+
+function dpUpdCmp(){
+  if(!$('cmp-on').checked){cFrom=cTo='';$('cmp-range-lbl').textContent='';return;}
+  const c=cmpRange(dFrom,dTo,$('cmp-sel').value);
+  cFrom=c.cf; cTo=c.ct;
+  $('cmp-range-lbl').textContent=fmtRng(cFrom,cTo);
+}
+
+function dpCmpChange(){dpUpdCmp();dpUpdLabel();}
+
+function dpUpdLabel(){
+  $('dp-label').textContent=PRESETS.find(p=>p.k===dpPreset)?.l||fmtRng(dFrom,dTo);
+}
+
+function dpRenderPresets(){
+  $('dp-presets').innerHTML=PRESETS.map(p=>`
+    <div class="dp-preset${p.k===dpPreset?' sel':''}" onclick="dpSelPreset('${p.k}')">${p.l}</div>
+  `).join('');
+}
+
+function dpSelPreset(k){
+  dpPreset=k;
+  dpRenderPresets();
+  if(k==='custom'){
+    $('dp-right').style.display='block';
+    dpRenderCals();
+  } else {
+    $('dp-right').style.display='none';
+    const r=presetRange(k);
+    pFrom=r.f; pTo=r.t;
+    dFrom=r.f; dTo=r.t;
+    dpUpdCmp(); dpUpdLabel();
+  }
+}
+
+function dpToggle(){
+  const dd=$('dp-dd');
+  dd.classList.contains('open')?dpClose():dd.classList.add('open');
+}
+
+function dpClose(){$('dp-dd').classList.remove('open');}
+
+function dpApply(){
+  if(dpPreset==='custom'&&pFrom&&pTo){dFrom=pFrom;dTo=pTo;}
+  dpUpdCmp(); dpUpdLabel(); dpClose(); load();
+}
+
+function dpRenderCals(){
+  const el=$('dp-months'); el.innerHTML='';
+  for(let i=0;i<2;i++){
+    let y=dpViewY,m=dpViewM+i;
+    if(m>11){m-=12;y++;}
+    el.appendChild(dpMonthEl(y,m));
+  }
+}
+
+function dpMonthEl(year,month){
+  const wrap=document.createElement('div');
+  wrap.className='dp-mon';
+  const first=new Date(year,month,1);
+  const last=new Date(year,month+1,0).getDate();
+  let dow=first.getDay(); if(dow===0)dow=7; dow--;
+  const today=isoD(new Date());
+  let html=`<div class="dp-mon-name">${RUM[month]} ${year}</div>`;
+  html+=`<div class="dp-wds">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d=>`<div class="dp-wd">${d}</div>`).join('')}</div>`;
+  html+=`<div class="dp-days">`;
+  for(let i=0;i<dow;i++)html+=`<div class="dp-d dp-empty"></div>`;
+  for(let d=1;d<=last;d++){
+    const iso=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    let cls='dp-d';
+    if(iso===pFrom) cls+=' range-start';
+    else if(iso===pTo) cls+=' range-end';
+    else if(pFrom&&pTo&&iso>pFrom&&iso<pTo) cls+=' in-range';
+    if(iso===today) cls+=' dp-today';
+    html+=`<div class="${cls}" onclick="dpPickDay('${iso}')">${d}</div>`;
+  }
+  html+=`</div>`;
+  wrap.innerHTML=html;
+  return wrap;
+}
+
+function dpPickDay(iso){
+  if(!pFrom||(pFrom&&pTo)){pFrom=iso;pTo=null;}
+  else{pTo=iso<pFrom?(()=>{const t=pFrom;pFrom=iso;return t;})():iso;}
+  if(pFrom&&!pTo) pTo=pFrom;
+  dpRenderCals();
+}
+
+document.addEventListener('click',e=>{
+  if(!$('dp-wrap').contains(e.target)) dpClose();
+});
+
+function pct(a,b){return b===0?null:(a-b)/b;}
+function fmtD(d,m){
+  if(d===null)return '<span class="dne">—</span>';
+  const p=(d*100).toFixed(1),s=d>=0?'+':'';
+  const bad=['cpc','cpa','spend'].includes(m)?d>0:d<0;
+  const cls=Math.abs(d)>.25?(bad?'dbd':'dok'):Math.abs(d)>.10?(bad?'dwn':'dok'):'dne';
+  return `<span class="${cls}">${s}${p}%</span>`;
+}
+function fM(v){return'$'+v.toFixed(2);}
+function fP(v){return v.toFixed(2)+'%';}
 
 async function loadClients(){
-  clients = await fetch('/api/clients').then(r=>r.json());
-  $('client-list').innerHTML = clients.map(c=>
-    `<div class="client-item" onclick="selectClient('${c.id}')" id="ci-${c.id}">
-      <div class="dot"></div>${c.name}
-    </div>`).join('');
-  if(clients.length) selectClient(clients[0].id);
+  try{
+    clients=await fetch('/api/clients').then(r=>r.json());
+    if(clients.error){throw new Error(clients.error);}
+    $('client-list').innerHTML=clients.length
+      ? clients.map(c=>`<div class="client-item" onclick="selClient('${c.id}')" id="ci-${c.id}"><div class="dot"></div>${c.name}</div>`).join('')
+      : '<div style="padding:12px;font-size:12px;color:var(--muted)">Нет клиентов</div>';
+    if(clients.length) selClient(clients[0].id);
+  }catch(e){
+    $('client-list').innerHTML=`<div style="padding:12px;font-size:12px;color:red">Ошибка: ${e.message}</div>`;
+  }
 }
 
-function selectClient(id){
-  activeClient = clients.find(c=>c.id===id);
+function selClient(id){
+  active=clients.find(c=>c.id===id);
   document.querySelectorAll('.client-item').forEach(el=>el.classList.remove('active'));
   const el=$(`ci-${id}`); if(el) el.classList.add('active');
-  $('client-title').textContent = activeClient.name;
-  activeChannel='all';
-  load();
+  $('page-title').textContent=active.name;
+  activeCh='all'; load();
 }
 
 async function load(){
-  if(!activeClient||!dateFrom) return;
-  const url = `/api/clients/${activeClient.id}/summary?date_from=${dateFrom}&date_to=${dateTo}&compare_from=${compareFrom}&compare_to=${compareTo}`;
-  const summary = await fetch(url).then(r=>r.json());
-  renderMetrics(summary);
-  renderTabs(summary);
-  renderContent(summary);
+  if(!active||!dFrom) return;
+  const url=`/api/clients/${active.id}/summary?date_from=${dFrom}&date_to=${dTo}&compare_from=${cFrom}&compare_to=${cTo}`;
+  const s=await fetch(url).then(r=>r.json());
+  renderSum(s); renderTabs(s); renderContent(s);
 }
 
-function pct(a,b){ return b===0?null:(a-b)/b; }
-function fmtD(d,m){
-  if(d===null) return '<span class="delta-neutral">—</span>';
-  const s=d>=0?'+':'', p=(d*100).toFixed(1);
-  const bad=['cpc','cpa','spend'].includes(m)?d>0:d<0;
-  const cls=Math.abs(d)>.25?(bad?'delta-danger':'delta-ok'):Math.abs(d)>.10?(bad?'delta-warn':'delta-ok'):'delta-neutral';
-  return `<span class="${cls}">${s}${p}%</span>`;
-}
-function fmtM(v){ return '$'+v.toFixed(2); }
-function fmtP(v){ return v.toFixed(2)+'%'; }
-
-function renderMetrics(s){
-  let t={spend:0,clicks:0,impressions:0,leads:0}, p={spend:0,clicks:0,impressions:0,leads:0};
-  for(const ch of s.channels){ for(const k of Object.keys(t)){ t[k]+=ch.today[k]||0; p[k]+=ch.compare[k]||0; } }
-  const cpa=t.leads>0?t.spend/t.leads:0, ctr=t.impressions>0?t.clicks/t.impressions*100:0;
-  $('summary-metrics').innerHTML=[
-    {l:'Расход', v:fmtM(t.spend), d:pct(t.spend,p.spend), m:'spend'},
-    {l:'Клики',  v:t.clicks.toLocaleString(), d:pct(t.clicks,p.clicks), m:'clicks'},
-    {l:'CTR',    v:fmtP(ctr), d:null, m:'ctr'},
-    {l:'Лиды',   v:t.leads.toFixed(0), d:pct(t.leads,p.leads), m:'leads'},
-    {l:'CPA',    v:fmtM(cpa), d:null, m:'cpa'},
-  ].map(c=>`<div class="metric-card">
-    <div class="metric-label">${c.l}</div>
-    <div class="metric-value">${c.v}</div>
-    <div class="metric-delta">${fmtD(c.d,c.m)}</div>
-  </div>`).join('');
+function renderSum(s){
+  let t={spend:0,clicks:0,impressions:0,leads:0},p={spend:0,clicks:0,impressions:0,leads:0};
+  for(const ch of s.channels){for(const k of Object.keys(t)){t[k]+=ch.today[k]||0;p[k]+=ch.compare[k]||0;}}
+  const cpa=t.leads>0?t.spend/t.leads:0,ctr=t.impressions>0?t.clicks/t.impressions*100:0;
+  $('sum-metrics').innerHTML=[
+    {l:'Расход',v:fM(t.spend),d:pct(t.spend,p.spend),m:'spend'},
+    {l:'Клики', v:t.clicks.toLocaleString(),d:pct(t.clicks,p.clicks),m:'clicks'},
+    {l:'CTR',   v:fP(ctr),d:null,m:'ctr'},
+    {l:'Лиды',  v:t.leads.toFixed(0),d:pct(t.leads,p.leads),m:'leads'},
+    {l:'CPA',   v:fM(cpa),d:null,m:'cpa'},
+  ].map(c=>`<div class="mc"><div class="ml">${c.l}</div><div class="mv">${c.v}</div><div class="md">${fmtD(c.d,c.m)}</div></div>`).join('');
 }
 
 function renderTabs(s){
   const tabs=[{key:'all',label:'Все каналы'},...s.channels.map(c=>({key:c.channel,label:`${c.channel_icon} ${c.channel_name}`}))];
-  $('channels-tabs').innerHTML=tabs.map(t=>`<div class="tab ${t.key===activeChannel?'active':''}" onclick="setChannel('${t.key}')">${t.label}</div>`).join('');
+  $('chan-tabs').innerHTML=tabs.map(t=>`<div class="tab${t.key===activeCh?' active':''}" onclick="selChan('${t.key}')">${t.label}</div>`).join('');
 }
 
-function setChannel(key){
-  activeChannel=key;
-  fetch(`/api/clients/${activeClient.id}/summary?date_from=${dateFrom}&date_to=${dateTo}&compare_from=${compareFrom}&compare_to=${compareTo}`)
-    .then(r=>r.json()).then(s=>{ renderTabs(s); renderContent(s); });
+function selChan(key){
+  activeCh=key;
+  fetch(`/api/clients/${active.id}/summary?date_from=${dFrom}&date_to=${dTo}&compare_from=${cFrom}&compare_to=${cTo}`)
+    .then(r=>r.json()).then(s=>{renderTabs(s);renderContent(s);});
 }
 
 async function renderContent(s){
-  const el=$('main-content');
-  if(!s.channels.length){ el.innerHTML='<div class="empty">Нет данных. Нажми «Обновить».</div>'; return; }
-  if(activeChannel==='all'){
-    el.innerHTML=`<div class="card"><div class="card-title">Сводка по каналам</div>`+
+  const el=$('content');
+  if(!s.channels.length){el.innerHTML='<div class="empty">Нет данных. Нажми «Обновить».</div>';return;}
+  if(activeCh==='all'){
+    el.innerHTML=`<div class="card"><div class="ct">Сводка по каналам</div>`+
       s.channels.map(ch=>{
         const y=ch.today,p=ch.compare;
-        return `<div class="ch-block">
-          <div class="ch-header">${ch.channel_icon} ${ch.channel_name}</div>
-          <div class="ch-metrics">
-            ${[['Расход',fmtM(y.spend),pct(y.spend,p.spend),'spend'],
-               ['CTR',fmtP(y.ctr),pct(y.ctr,p.ctr),'ctr'],
-               ['CPC',fmtM(y.cpc),pct(y.cpc,p.cpc),'cpc'],
-               ['CPM',fmtM(y.cpm),null,'cpm'],
-               ['Лиды',y.leads.toFixed(0),pct(y.leads,p.leads),'leads'],
-               ['CPA',fmtM(y.cpa),null,'cpa'],
-            ].map(([l,v,d,m])=>`<div class="ch-metric">
-              <div class="ch-metric-label">${l}</div>
-              <div class="ch-metric-value">${v}</div>
-              <div style="font-size:11px">${fmtD(d,m)}</div>
-            </div>`).join('')}
-          </div>
-        </div>`;
-      }).join('')+`</div>`;
+        return `<div class="chb"><div class="chh">${ch.channel_icon} ${ch.channel_name}</div><div class="chm">`+
+          [['Расход',fM(y.spend),pct(y.spend,p.spend),'spend'],['CTR',fP(y.ctr),pct(y.ctr,p.ctr),'ctr'],
+           ['CPC',fM(y.cpc),pct(y.cpc,p.cpc),'cpc'],['CPM',fM(y.cpm),null,'cpm'],
+           ['Лиды',y.leads.toFixed(0),pct(y.leads,p.leads),'leads'],['CPA',fM(y.cpa),null,'cpa']].map(([l,v,d,m])=>
+            `<div class="chmb"><div class="chml">${l}</div><div class="chmv">${v}</div><div style="font-size:11px">${fmtD(d,m)}</div></div>`).join('')+
+          `</div></div>`;}).join('')+`</div>`;
   } else {
-    const ch=s.channels.find(c=>c.channel===activeChannel);
-    if(!ch){ el.innerHTML='<div class="empty">Нет данных</div>'; return; }
-    const camps=await fetch(`/api/clients/${activeClient.id}/campaigns?channel=${activeChannel}&date_from=${dateFrom}&date_to=${dateTo}&compare_from=${compareFrom}&compare_to=${compareTo}`).then(r=>r.json());
+    const ch=s.channels.find(c=>c.channel===activeCh);
+    if(!ch){el.innerHTML='<div class="empty">Нет данных</div>';return;}
+    const camps=await fetch(`/api/clients/${active.id}/campaigns?channel=${activeCh}&date_from=${dFrom}&date_to=${dTo}&compare_from=${cFrom}&compare_to=${cTo}`).then(r=>r.json());
     const y=ch.today,p=ch.compare;
     let rows='<div class="empty">Нет данных по кампаниям</div>';
     if(camps.campaigns?.length){
-      rows=`<table><thead><tr>
-        <th>Кампания</th><th>Расход</th><th>CTR</th><th>CPC</th><th>CPM</th><th>Лиды</th><th>CPA</th><th>Статус</th>
-      </tr></thead><tbody>`+camps.campaigns.map(({today:c,compare:cp})=>{
-        const bad=['spend','ctr','cpc','leads'].some(m=>{const d=pct(c[m],cp[m]);return d!==null&&(['cpc','spend'].includes(m)?d>.25:d<-.20);});
-        return `<tr>
-          <td>${bad?'🔴':''} ${c.name}</td>
-          <td>${fmtM(c.spend)} ${fmtD(pct(c.spend,cp.spend),'spend')}</td>
-          <td>${fmtP(c.ctr)} ${fmtD(pct(c.ctr,cp.ctr),'ctr')}</td>
-          <td>${fmtM(c.cpc)} ${fmtD(pct(c.cpc,cp.cpc),'cpc')}</td>
-          <td>${fmtM(c.cpm)}</td>
-          <td>${c.leads.toFixed(0)} ${fmtD(pct(c.leads,cp.leads),'leads')}</td>
-          <td>${fmtM(c.cpa)}</td>
-          <td><span class="badge ${bad?'badge-danger':'badge-ok'}">${bad?'Аномалия':'Норма'}</span></td>
-        </tr>`;
-      }).join('')+`</tbody></table>`;
+      rows=`<table><thead><tr><th>Кампания</th><th>Расход</th><th>CTR</th><th>CPC</th><th>CPM</th><th>Лиды</th><th>CPA</th><th>Статус</th></tr></thead><tbody>`+
+        camps.campaigns.map(({today:c,compare:cp})=>{
+          const bad=['spend','ctr','cpc','leads'].some(m=>{const d=pct(c[m],cp[m]);return d!==null&&(['cpc','spend'].includes(m)?d>.25:d<-.20);});
+          return `<tr><td>${bad?'🔴':''} ${c.name}</td><td>${fM(c.spend)} ${fmtD(pct(c.spend,cp.spend),'spend')}</td>
+            <td>${fP(c.ctr)} ${fmtD(pct(c.ctr,cp.ctr),'ctr')}</td><td>${fM(c.cpc)} ${fmtD(pct(c.cpc,cp.cpc),'cpc')}</td>
+            <td>${fM(c.cpm)}</td><td>${c.leads.toFixed(0)} ${fmtD(pct(c.leads,cp.leads),'leads')}</td>
+            <td>${fM(c.cpa)}</td><td><span class="badge ${bad?'bbd':'bok'}">${bad?'Аномалия':'Норма'}</span></td></tr>`;}).join('')+`</tbody></table>`;
     }
-    el.innerHTML=`<div class="metrics-grid">`+
-      [['Расход',fmtM(y.spend),pct(y.spend,p.spend),'spend'],['CTR',fmtP(y.ctr),pct(y.ctr,p.ctr),'ctr'],
-       ['CPC',fmtM(y.cpc),pct(y.cpc,p.cpc),'cpc'],['CPM',fmtM(y.cpm),null,'cpm'],
-       ['Лиды',y.leads.toFixed(0),pct(y.leads,p.leads),'leads'],['CPA',fmtM(y.cpa),null,'cpa'],
-      ].map(([l,v,d,m])=>`<div class="metric-card">
-        <div class="metric-label">${l}</div><div class="metric-value">${v}</div>
-        <div class="metric-delta">${fmtD(d,m)}</div>
-      </div>`).join('')+`</div>
-      <div class="card"><div class="card-title">Кампании — ${ch.channel_icon} ${ch.channel_name}</div>${rows}</div>`;
+    el.innerHTML=`<div class="mg">`+
+      [['Расход',fM(y.spend),pct(y.spend,p.spend),'spend'],['CTR',fP(y.ctr),pct(y.ctr,p.ctr),'ctr'],
+       ['CPC',fM(y.cpc),pct(y.cpc,p.cpc),'cpc'],['CPM',fM(y.cpm),null,'cpm'],
+       ['Лиды',y.leads.toFixed(0),pct(y.leads,p.leads),'leads'],['CPA',fM(y.cpa),null,'cpa']].map(([l,v,d,m])=>
+        `<div class="mc"><div class="ml">${l}</div><div class="mv">${v}</div><div class="md">${fmtD(d,m)}</div></div>`).join('')+`</div>
+      <div class="card"><div class="ct">Кампании — ${ch.channel_icon} ${ch.channel_name}</div>${rows}</div>`;
   }
 }
 
-function getToken(){
-  if(!adminToken) adminToken=prompt('Admin token:');
-  return adminToken;
-}
+function getToken(){if(!token)token=prompt('Admin token:');return token;}
 
-async function fetchData(){
-  const btn=$('fetch-btn'), token=getToken();
-  if(!token) return;
+async function doFetch(){
+  const btn=$('fetch-btn'),tok=getToken(); if(!tok) return;
   btn.textContent='⏳ Загружаю...'; btn.disabled=true;
+  const bar=$('pbar'),fill=$('pfill');
+  bar.style.display='block'; fill.style.width='5%';
   try{
     const r=await fetch('/api/fetch',{
       method:'POST',
-      headers:{'X-Admin-Token':token,'Content-Type':'application/json'},
-      body:JSON.stringify({date_from:dateFrom,date_to:dateTo,compare_from:compareFrom,compare_to:compareTo})
+      headers:{'X-Admin-Token':tok,'Content-Type':'application/json'},
+      body:JSON.stringify({date_from:dFrom,date_to:dTo,compare_from:cFrom,compare_to:cTo})
     });
-    if(r.ok){ btn.textContent='✓ Готово'; await load(); }
-    else{ adminToken=null; btn.textContent='✗ Ошибка'; }
-  }catch(e){ btn.textContent='✗ Ошибка'; }
-  btn.disabled=false;
-  setTimeout(()=>btn.textContent='⟳ Обновить',2000);
+    if(!r.ok){token=null;btn.textContent='✗ Ошибка';btn.disabled=false;bar.style.display='none';return;}
+    const {job_id,total}=await r.json();
+    const poll=setInterval(async()=>{
+      const st=await fetch(`/api/fetch_status/${job_id}`).then(r=>r.json());
+      fill.style.width=`${Math.round(((st.done||0)/Math.max(total||1,1))*100)}%`;
+      if(st.status==='done'){
+        clearInterval(poll);
+        bar.style.display='none';
+        btn.textContent='✓ Готово'; btn.disabled=false;
+        await load();
+        setTimeout(()=>btn.textContent='⟳ Обновить',2000);
+      }
+    },1500);
+  }catch(e){btn.textContent='✗ Ошибка';btn.disabled=false;bar.style.display='none';}
 }
 
-function openTgModal(){
-  if(!activeClient) return;
-  $('modal-date-from').textContent = dateFrom;
-  $('modal-date-to').textContent   = dateTo===dateFrom ? '' : '— '+dateTo;
-  $('modal-cmp-from').textContent  = compareFrom;
-  $('modal-cmp-to').textContent    = compareTo===compareFrom ? '' : '— '+compareTo;
-
-  const sections=[
-    {key:'summary',     label:'📊 Сводка (все каналы)',          checked:true},
-    ...activeClient.channels.map(ch=>({
-      key:ch.key+'_campaigns',
-      label:`${ch.icon} ${ch.name} (разбивка по кампаниям)`,
-      checked:false
-    }))
-  ];
-  $('modal-sections').innerHTML=sections.map(s=>`
-    <label class="check-item">
-      <input type="checkbox" value="${s.key}" ${s.checked?'checked':''}>
-      ${s.label}
-    </label>`).join('');
+function tgOpen(){
+  if(!active) return;
+  $('tg-period').textContent=`${fmtRng(dFrom,dTo)}${cFrom?` vs ${fmtRng(cFrom,cTo)}`:''}`;
+  $('tg-sections').innerHTML=[
+    {k:'summary',l:'📊 Сводка (все каналы)',c:true},
+    ...active.channels.map(ch=>({k:ch.key+'_campaigns',l:`${ch.icon} ${ch.name} — по кампаниям`,c:false}))
+  ].map(s=>`<label class="chkitem"><input type="checkbox" value="${s.k}" ${s.c?'checked':''}>${s.l}</label>`).join('');
   $('tg-modal').classList.add('open');
 }
 
-function closeTgModal(){ $('tg-modal').classList.remove('open'); }
+function tgClose(){$('tg-modal').classList.remove('open');}
 
-async function doSendTelegram(){
-  const token=getToken(); if(!token) return;
-  const btn=$('modal-send-btn');
-  const sections=[...$('modal-sections').querySelectorAll('input:checked')].map(i=>i.value);
-  if(!sections.length){ alert('Выбери хотя бы один раздел'); return; }
-
+async function tgSend(){
+  const tok=getToken(); if(!tok) return;
+  const btn=$('tg-send-btn');
+  const secs=[...$('tg-sections').querySelectorAll('input:checked')].map(i=>i.value);
+  if(!secs.length){alert('Выбери хотя бы один раздел');return;}
   btn.textContent='⏳ Отправляю...'; btn.disabled=true;
   try{
     const r=await fetch('/api/send_telegram',{
       method:'POST',
-      headers:{'X-Admin-Token':token,'Content-Type':'application/json'},
-      body:JSON.stringify({
-        client_id:   activeClient.id,
-        date_from:   dateFrom, date_to:   dateTo,
-        compare_from:compareFrom, compare_to:compareTo,
-        sections
-      })
+      headers:{'X-Admin-Token':tok,'Content-Type':'application/json'},
+      body:JSON.stringify({client_id:active.id,date_from:dFrom,date_to:dTo,compare_from:cFrom,compare_to:cTo,sections:secs})
     });
-    if(r.ok){ btn.textContent='✓ Отправлено'; setTimeout(closeTgModal,1500); }
-    else{ adminToken=null; btn.textContent='✗ Ошибка'; }
-  }catch(e){ btn.textContent='✗ Ошибка'; }
+    if(r.ok){btn.textContent='✓ Отправлено';setTimeout(tgClose,1500);}
+    else{token=null;btn.textContent='✗ Ошибка';}
+  }catch(e){btn.textContent='✗ Ошибка';}
   btn.disabled=false;
-  setTimeout(()=>btn.textContent='Отправить',2000);
+  setTimeout(()=>btn.textContent='Отправить',3000);
 }
 
-initDates();
+dpInit();
 loadClients();
 </script>
 </body>
