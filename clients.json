@@ -1,0 +1,23 @@
+[
+  {
+    "id": "client_a",
+    "name": "Pickles Team",
+    "telegram_chat_id": "-1002608248785",
+    "summary_currency": "USD",
+    "channels": {
+      "google_ads": {
+        "customer_id": "6082197800",
+        "login_customer_id": "1530795792",
+        "currency": "USD"
+      },
+      "meta_ads": {
+        "ad_account_id": "act_123456789",
+        "currency": "USD"
+      },
+      "yandex": {
+        "client_login": "teampickles",
+        "currency": "UZS"
+      }
+    }
+  }
+]
