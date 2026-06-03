@@ -201,7 +201,7 @@ let dpPreset='yesterday';
 let dpVY, dpVM; // view year/month for calendar
 let dpIsOpen=false;
 
-function isoD(d){return d.toISOString().split('T')[0];}
+function isoD(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 function addD(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
 function parseD(s){return new Date(s+'T00:00:00');}
 function fmtL(s){const d=parseD(s);return`${d.getDate()} ${RUG[d.getMonth()]} ${d.getFullYear()}`;}
