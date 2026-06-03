@@ -16,10 +16,13 @@ class YandexChannel(BaseChannel):
             return False
         return bool(os.environ.get("YANDEX_TOKEN"))
 
-    def _fetch(self, client: dict, date: str, field_names: list, report_type: str) -> list[list]:
+    def _fetch(self, client: dict, date: str, field_names: list, report_type: str) -> list:
+        token        = os.environ["YANDEX_TOKEN"]
+        client_login = client["channels"]["yandex"]["client_login"]
+
         headers = {
-            "Authorization":       f"Bearer {os.environ['YANDEX_TOKEN']}",
-            "Client-Login":        client["channels"]["yandex"]["client_login"],
+            "Authorization":       f"Bearer {token}",
+            "Client-Login":        client_login,
             "Accept-Language":     "ru",
             "processingMode":      "auto",
             "returnMoneyInMicros": "false",
@@ -30,22 +33,32 @@ class YandexChannel(BaseChannel):
         body = {"params": {
             "SelectionCriteria": {"DateFrom": date, "DateTo": date},
             "FieldNames": field_names,
-            "ReportName": f"{report_type}_{date}_{client['id']}",
-            "ReportType": report_type,
+            "ReportName":    f"{report_type}_{date}_{client['id']}",
+            "ReportType":    report_type,
             "DateRangeType": "CUSTOM_DATE",
-            "Format": "TSV",
-            "IncludeVAT": "YES",
+            "Format":        "TSV",
+            "IncludeVAT":    "YES",
         }}
-        r = requests.post("https://api.direct.yandex.com/json/v5/reports",
-                          headers=headers, json=body, timeout=60)
-        if r.status_code != 200:
-            log.warning(f"Яндекс [{date}] {client['id']}: {r.status_code}")
+
+        r = requests.post(
+            "https://api.direct.yandex.com/json/v5/reports",
+            headers=headers, json=body, timeout=60
+        )
+
+        if r.status_code == 200:
+            lines = r.text.strip().split("\n")
+            if len(lines) < 2:
+                log.warning(f"Яндекс [{date}] {client['id']}: нет данных")
+                return []
+            keys = lines[0].split("\t")
+            return [dict(zip(keys, line.split("\t"))) for line in lines[1:]]
+
+        elif r.status_code in (201, 202):
+            log.warning(f"Яндекс [{date}] {client['id']}: отчёт в очереди ({r.status_code})")
             return []
-        lines = r.text.strip().split("\n")
-        if len(lines) < 2:
+        else:
+            log.warning(f"Яндекс [{date}] {client['id']}: {r.status_code} — {r.text[:600]}")
             return []
-        keys = lines[0].split("\t")
-        return [dict(zip(keys, line.split("\t"))) for line in lines[1:]]
 
     def fetch_account(self, client: dict, date: str):
         try:
@@ -57,14 +70,15 @@ class YandexChannel(BaseChannel):
             row = rows[0]
             spend = float(row.get("Cost", 0))
             clicks = float(row.get("Clicks", 0))
-            impressions = float(row.get("Impressions", 0))
-            leads = float(row.get("Conversions", 0))
+            impr   = float(row.get("Impressions", 0))
+            leads  = float(row.get("Conversions", 0))
             return dict(
-                spend=spend, clicks=clicks, impressions=impressions,
+                spend=spend, clicks=clicks, impressions=impr,
                 ctr=float(row.get("Ctr", 0)),
                 cpc=float(row.get("AvgCpc", 0)),
-                cpm=safe_div(spend, impressions) * 1000,
-                leads=leads, cpa=safe_div(spend, leads),
+                cpm=safe_div(spend, impr) * 1000,
+                leads=leads,
+                cpa=safe_div(spend, leads),
             )
         except Exception as e:
             log.error(f"Яндекс account [{date}] {client['id']}: {e}")
@@ -78,18 +92,19 @@ class YandexChannel(BaseChannel):
                 "CAMPAIGN_PERFORMANCE_REPORT")
             result = []
             for row in rows:
-                spend = float(row.get("Cost", 0))
+                spend  = float(row.get("Cost", 0))
                 clicks = float(row.get("Clicks", 0))
-                impressions = float(row.get("Impressions", 0))
-                leads = float(row.get("Conversions", 0))
+                impr   = float(row.get("Impressions", 0))
+                leads  = float(row.get("Conversions", 0))
                 result.append({
-                    "id": row.get("CampaignId", ""),
+                    "id":   row.get("CampaignId", ""),
                     "name": row.get("CampaignName", "Unknown"),
-                    "spend": spend, "clicks": clicks, "impressions": impressions,
-                    "ctr": float(row.get("Ctr", 0)),
-                    "cpc": float(row.get("AvgCpc", 0)),
-                    "cpm": safe_div(spend, impressions) * 1000,
-                    "leads": leads, "cpa": safe_div(spend, leads),
+                    "spend": spend, "clicks": clicks, "impressions": impr,
+                    "ctr":  float(row.get("Ctr", 0)),
+                    "cpc":  float(row.get("AvgCpc", 0)),
+                    "cpm":  safe_div(spend, impr) * 1000,
+                    "leads": leads,
+                    "cpa":  safe_div(spend, leads),
                 })
             return sorted(result, key=lambda x: x["spend"], reverse=True)
         except Exception as e:
