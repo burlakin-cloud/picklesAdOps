@@ -18,56 +18,65 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .page-title{font-size:17px;font-weight:600;flex:1}
 
-/* Date picker trigger */
+/* Date picker */
 .dp-wrap{position:relative}
-.dp-trigger{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:13px;color:var(--text);white-space:nowrap}
+.dp-trigger{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;font-size:13px;color:var(--text);white-space:nowrap;user-select:none}
 .dp-trigger:hover{background:var(--bg)}
 .dp-trigger svg{width:14px;height:14px;stroke:var(--muted);fill:none;flex-shrink:0;stroke-width:1.8}
-
-/* Dropdown */
-.dp-dd{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.12);z-index:200;overflow:hidden;display:none;width:580px}
-.dp-dd.open{display:flex;flex-direction:column}
-.dp-main{display:flex}
-.dp-presets{width:180px;border-right:1px solid var(--border);padding:8px 0;flex-shrink:0}
-.dp-preset{padding:8px 16px;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.dp-dd{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.14);z-index:500;display:none;flex-direction:column;min-width:220px}
+.dp-dd.open{display:flex}
+.dp-body{display:flex}
+.dp-presets{width:200px;padding:8px 0;flex-shrink:0}
+.dp-preset{padding:9px 16px;font-size:13px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .dp-preset:hover{background:var(--bg)}
-.dp-preset.sel{color:var(--accent);font-weight:500;background:#EAF3FB}
-.dp-right{padding:16px;flex:1}
+.dp-preset.sel{color:var(--accent);font-weight:500}
+.dp-preset-check{width:16px;height:16px;border-radius:50%;background:var(--accent);display:none;align-items:center;justify-content:center;flex-shrink:0}
+.dp-preset.sel .dp-preset-check{display:flex}
+.dp-cal-side{padding:16px;border-left:1px solid var(--border);display:none;flex-direction:column;gap:12px}
+.dp-cal-side.visible{display:flex}
 .dp-months{display:flex;gap:20px}
-.dp-mon{flex:1}
-.dp-mon-name{font-size:11px;font-weight:500;text-align:center;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.dp-wds,.dp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.dp-mon{width:196px}
+.dp-mon-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.dp-mon-name{font-size:12px;font-weight:500;color:var(--text);text-align:center;flex:1}
+.dp-nav{width:24px;height:24px;border:none;background:none;cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.dp-nav:hover{background:var(--bg)}
+.dp-wds,.dp-days{display:grid;grid-template-columns:repeat(7,28px);gap:1px}
 .dp-wds{margin-bottom:2px}
 .dp-wd{font-size:11px;color:var(--muted);text-align:center;padding:3px 0}
-.dp-d{font-size:12px;text-align:center;padding:5px 2px;border-radius:4px;cursor:pointer;color:var(--text)}
+.dp-d{font-size:12px;text-align:center;padding:5px;border-radius:4px;cursor:pointer;color:var(--text);width:28px;height:28px;display:flex;align-items:center;justify-content:center}
 .dp-d:hover:not(.dp-empty):not(.dp-other){background:var(--bg)}
-.dp-d.in-range{background:#EAF3FB;color:var(--accent)}
-.dp-d.range-start,.dp-d.range-end{background:var(--accent);color:#fff;font-weight:500;border-radius:6px}
+.dp-d.in-range{background:#EAF3FB;color:var(--accent);border-radius:0}
+.dp-d.range-s{background:var(--accent);color:#fff;font-weight:500;border-radius:6px 0 0 6px}
+.dp-d.range-e{background:var(--accent);color:#fff;font-weight:500;border-radius:0 6px 6px 0}
+.dp-d.range-s.range-e{border-radius:6px}
 .dp-d.dp-other{color:#ccc;cursor:default}
 .dp-d.dp-empty{cursor:default}
 .dp-d.dp-today{font-weight:700}
-.dp-cmp{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--border);flex-wrap:wrap}
-.dp-cmp label{font-size:13px;color:var(--muted)}
-.dp-cmp select{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text)}
-.dp-cmp-range{font-size:12px;color:var(--muted)}
-.dp-footer{display:flex;justify-content:flex-end;gap:8px;padding:10px 16px;border-top:1px solid var(--border)}
+.dp-cal-info{font-size:12px;color:var(--muted);text-align:center;min-height:18px}
+
+/* Compare section */
+.dp-cmp{padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.dp-cmp-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dp-cmp-row label{font-size:13px;color:var(--muted);cursor:pointer}
+.dp-cmp-row input[type=checkbox]{width:14px;height:14px;accent-color:var(--accent);cursor:pointer}
+.dp-cmp-row select{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text)}
+.dp-cmp-dates{font-size:12px;color:var(--muted);padding:4px 8px;background:var(--bg);border-radius:6px}
+.dp-cmp-custom{display:none;align-items:center;gap:6px;flex-wrap:wrap}
+.dp-cmp-custom.visible{display:flex}
+.dp-cmp-custom input[type=date]{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text)}
+.dp-cmp-custom span{font-size:12px;color:var(--muted)}
+.dp-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
 .dp-cancel{padding:6px 14px;font-size:13px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer}
 .dp-apply{padding:6px 14px;font-size:13px;border:none;border-radius:6px;background:var(--accent);color:#fff;cursor:pointer;font-weight:500}
 
 button.act{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:13px;color:var(--text);cursor:pointer;white-space:nowrap}
-button.act:hover{background:var(--bg)}
-button.act:disabled{opacity:.6;cursor:not-allowed}
-button.tg{background:#229ED9;border-color:#229ED9;color:#fff}
-button.tg:hover{background:#1a8fc7}
-
+button.act:hover{background:var(--bg)}button.act:disabled{opacity:.6;cursor:not-allowed}
+button.tg{background:#229ED9;border-color:#229ED9;color:#fff}button.tg:hover{background:#1a8fc7}
 .pbar{height:3px;background:var(--bg);border-radius:2px;overflow:hidden;margin-bottom:12px;display:none}
-.pfill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;width:0}
-
+.pfill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s;width:0}
 .mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:16px}
 .mc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
-.ml{font-size:11px;color:var(--muted);margin-bottom:4px}
-.mv{font-size:20px;font-weight:600}
-.md{font-size:12px;margin-top:2px}
+.ml{font-size:11px;color:var(--muted);margin-bottom:4px}.mv{font-size:20px;font-weight:600}.md{font-size:12px;margin-top:2px}
 .dok{color:var(--ok)}.dwn{color:var(--warn)}.dbd{color:var(--danger)}.dne{color:var(--muted)}
 .tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .tab{padding:5px 14px;border:1px solid var(--border);border-radius:20px;font-size:13px;cursor:pointer;background:var(--surface)}
@@ -76,8 +85,7 @@ button.tg:hover{background:#1a8fc7}
 .ct{font-weight:600;font-size:14px;margin-bottom:12px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;padding:7px 10px;color:var(--muted);font-weight:400;border-bottom:1px solid var(--border)}
-td{padding:8px 10px;border-bottom:1px solid var(--border)}
-tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg)}
+td{padding:8px 10px;border-bottom:1px solid var(--border)}tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg)}
 .badge{font-size:11px;padding:2px 8px;border-radius:12px;font-weight:500}
 .bok{background:#E1F5EE;color:#0F6E56}.bbd{background:#FCEBEB;color:#A32D2D}
 .empty{color:var(--muted);text-align:center;padding:32px;font-size:13px}
@@ -86,10 +94,8 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg)}
 .chh{font-weight:600;font-size:14px;margin-bottom:10px}
 .chm{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px}
 .chmb{background:var(--bg);border-radius:8px;padding:8px 10px}
-.chml{font-size:10px;color:var(--muted);margin-bottom:2px}
-.chmv{font-size:13px;font-weight:600}
-
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:center;justify-content:center}
+.chml{font-size:10px;color:var(--muted);margin-bottom:2px}.chmv{font-size:13px;font-weight:600}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:14px;padding:24px;width:420px;max-width:95vw}
 .modal h3{font-size:16px;font-weight:600;margin-bottom:16px}
@@ -98,12 +104,10 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg)}
 .period-box{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:13px}
 .chklist{display:flex;flex-direction:column;gap:6px}
 .chkitem{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;padding:9px 12px;border:1px solid var(--border);border-radius:8px}
-.chkitem:hover{background:var(--bg)}
-.chkitem input{width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
+.chkitem:hover{background:var(--bg)}.chkitem input{width:15px;height:15px;cursor:pointer;accent-color:var(--accent)}
 .mact{display:flex;gap:8px;margin-top:20px}
 .mact button{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);font-size:14px;cursor:pointer}
-.msend{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
-.mcancel{background:var(--surface)}
+.msend{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}.mcancel{background:var(--surface)}
 </style>
 </head>
 <body>
@@ -119,37 +123,48 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--bg)}
     <div class="page-title" id="page-title">Выбери клиента</div>
 
     <div class="dp-wrap" id="dp-wrap">
-      <div class="dp-trigger" id="dp-trigger" onclick="dpToggle()">
+      <div class="dp-trigger" id="dp-trigger">
         <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         <span id="dp-label">Вчера</span>
         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
 
       <div class="dp-dd" id="dp-dd">
-        <div class="dp-main">
+        <div class="dp-body">
           <div class="dp-presets" id="dp-presets"></div>
-          <div class="dp-right" id="dp-right" style="display:none">
+          <div class="dp-cal-side" id="dp-cal-side">
             <div class="dp-months" id="dp-months"></div>
+            <div class="dp-cal-info" id="dp-cal-info">Выбери начальную дату</div>
           </div>
         </div>
+
         <div class="dp-cmp">
-          <input type="checkbox" id="cmp-on" checked onchange="dpCmpChange()">
-          <label for="cmp-on">Сравнить с</label>
-          <select id="cmp-sel" onchange="dpCmpChange()">
-            <option value="prev">Предыдущим периодом</option>
-            <option value="month">Прошлым месяцем</option>
-            <option value="year">Прошлым годом</option>
-          </select>
-          <span class="dp-cmp-range" id="cmp-range-lbl"></span>
+          <div class="dp-cmp-row">
+            <input type="checkbox" id="cmp-on" checked>
+            <label for="cmp-on">Сравнить с</label>
+            <select id="cmp-sel">
+              <option value="prev">Предыдущим периодом</option>
+              <option value="month">Прошлым месяцем</option>
+              <option value="year">Прошлым годом</option>
+              <option value="custom">Произвольным</option>
+            </select>
+            <span class="dp-cmp-dates" id="cmp-auto-lbl"></span>
+          </div>
+          <div class="dp-cmp-custom" id="cmp-custom-row">
+            <input type="date" id="cmp-from-input">
+            <span>—</span>
+            <input type="date" id="cmp-to-input">
+          </div>
         </div>
-        <div class="dp-footer">
-          <button class="dp-cancel" onclick="dpClose()">Отмена</button>
-          <button class="dp-apply" onclick="dpApply()">Применить</button>
+
+        <div class="dp-footer" id="dp-footer" style="display:none">
+          <button class="dp-cancel" id="dp-cancel-btn">Отмена</button>
+          <button class="dp-apply" id="dp-apply-btn">Применить</button>
         </div>
       </div>
     </div>
 
-    <button class="act" id="fetch-btn" onclick="doFetch()">⟳ Обновить</button>
+    <button class="act" id="fetch-btn">⟳ Обновить</button>
     <button class="act tg" onclick="tgOpen()">✈ В Telegram</button>
   </div>
 
@@ -176,17 +191,18 @@ const $=id=>document.getElementById(id);
 const RUM=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const RUG=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
-let clients=[], active=null, activeCh='all', token=null;
-let dFrom='', dTo='', cFrom='', cTo='';
-let pFrom=null, pTo=null;
+let clients=[], active=null, activeCh='all', tok=null;
+let dFrom='',dTo='',cFrom='',cTo='';
+let pFrom=null,pTo=null;
 let dpPreset='yesterday';
-let dpViewY, dpViewM;
+let dpVY, dpVM; // view year/month for calendar
+let dpIsOpen=false;
 
 function isoD(d){return d.toISOString().split('T')[0];}
 function addD(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
 function parseD(s){return new Date(s+'T00:00:00');}
-function fmtLbl(s){const d=parseD(s);return `${d.getDate()} ${RUG[d.getMonth()]} ${d.getFullYear()}`;}
-function fmtRng(f,t){return f===t?fmtLbl(f):`${fmtLbl(f)} — ${fmtLbl(t)}`;}
+function fmtL(s){const d=parseD(s);return`${d.getDate()} ${RUG[d.getMonth()]} ${d.getFullYear()}`;}
+function fmtR(f,t){return f===t?fmtL(f):`${fmtL(f)} — ${fmtL(t)}`;}
 
 const PRESETS=[
   {k:'today',    l:'Сегодня'},
@@ -198,147 +214,217 @@ const PRESETS=[
   {k:'this_month',l:'Этот месяц'},
   {k:'last_month',l:'Прошлый месяц'},
   {k:'this_year', l:'Этот год'},
-  {k:'custom',    l:'Произвольный'},
+  {k:'custom',    l:'Произвольный диапазон'},
 ];
 
 function presetRange(k){
-  const t=new Date(); t.setHours(0,0,0,0);
+  const t=new Date();t.setHours(0,0,0,0);
   const y=addD(t,-1);
   switch(k){
-    case 'today':      return {f:isoD(t),  t:isoD(t)};
-    case 'yesterday':  return {f:isoD(y),  t:isoD(y)};
-    case 'last7':      return {f:isoD(addD(t,-7)), t:isoD(y)};
-    case 'last14':     return {f:isoD(addD(t,-14)),t:isoD(y)};
-    case 'last30':     return {f:isoD(addD(t,-30)),t:isoD(y)};
-    case 'last90':     return {f:isoD(addD(t,-90)),t:isoD(y)};
-    case 'this_month': return {f:isoD(new Date(t.getFullYear(),t.getMonth(),1)),t:isoD(y)};
-    case 'last_month': {
-      const fm=new Date(t.getFullYear(),t.getMonth()-1,1);
-      return {f:isoD(fm),t:isoD(new Date(t.getFullYear(),t.getMonth(),0))};
-    }
-    case 'this_year':  return {f:`${t.getFullYear()}-01-01`,t:isoD(y)};
-    default: return {f:isoD(y),t:isoD(y)};
+    case 'today':      return{f:isoD(t),t:isoD(t)};
+    case 'yesterday':  return{f:isoD(y),t:isoD(y)};
+    case 'last7':      return{f:isoD(addD(t,-7)),t:isoD(y)};
+    case 'last14':     return{f:isoD(addD(t,-14)),t:isoD(y)};
+    case 'last30':     return{f:isoD(addD(t,-30)),t:isoD(y)};
+    case 'last90':     return{f:isoD(addD(t,-90)),t:isoD(y)};
+    case 'this_month': return{f:isoD(new Date(t.getFullYear(),t.getMonth(),1)),t:isoD(y)};
+    case 'last_month': {const m=new Date(t.getFullYear(),t.getMonth()-1,1);return{f:isoD(m),t:isoD(new Date(t.getFullYear(),t.getMonth(),0))};}
+    case 'this_year':  return{f:`${t.getFullYear()}-01-01`,t:isoD(y)};
+    default: return{f:isoD(y),t:isoD(y)};
   }
 }
 
-function cmpRange(f,t,mode){
+function calcCmp(f,t,mode){
   const df=parseD(f),dt=parseD(t);
   const days=Math.round((dt-df)/86400000);
-  if(mode==='prev'){return {cf:isoD(addD(df,-(days+1))),ct:isoD(addD(df,-1))};}
-  if(mode==='month'){return {cf:isoD(new Date(df.getFullYear(),df.getMonth()-1,df.getDate())),ct:isoD(new Date(dt.getFullYear(),dt.getMonth()-1,dt.getDate()))};}
-  return {cf:isoD(new Date(df.getFullYear()-1,df.getMonth(),df.getDate())),ct:isoD(new Date(dt.getFullYear()-1,dt.getMonth(),dt.getDate()))};
+  if(mode==='prev') return{cf:isoD(addD(df,-(days+1))),ct:isoD(addD(df,-1))};
+  if(mode==='month') return{cf:isoD(new Date(df.getFullYear(),df.getMonth()-1,df.getDate())),ct:isoD(new Date(dt.getFullYear(),dt.getMonth()-1,dt.getDate()))};
+  return{cf:isoD(new Date(df.getFullYear()-1,df.getMonth(),df.getDate())),ct:isoD(new Date(dt.getFullYear()-1,dt.getMonth(),dt.getDate()))};
 }
 
 function dpInit(){
   const r=presetRange('yesterday');
-  dFrom=r.f; dTo=r.t;
-  dpPreset='yesterday';
-  dpUpdCmp();
-  dpUpdLabel();
+  dFrom=r.f;dTo=r.t;dpPreset='yesterday';
   const now=new Date();
-  dpViewY=now.getFullYear(); dpViewM=now.getMonth()-1;
-  if(dpViewM<0){dpViewM=11;dpViewY--;}
+  dpVY=now.getFullYear();dpVM=now.getMonth()-1;
+  if(dpVM<0){dpVM=11;dpVY--;}
+  dpUpdCmp();
+  dpRenderPresets();
+
+  // trigger
+  $('dp-trigger').addEventListener('click',e=>{
+    e.stopPropagation();
+    dpIsOpen?dpClose():dpOpen();
+  });
+
+  // stop all clicks inside dropdown from closing
+  $('dp-dd').addEventListener('click',e=>e.stopPropagation());
+
+  // compare controls
+  $('cmp-on').addEventListener('change',dpUpdCmp);
+  $('cmp-sel').addEventListener('change',dpUpdCmp);
+  $('cmp-from-input').addEventListener('change',dpUpdCmpCustom);
+  $('cmp-to-input').addEventListener('change',dpUpdCmpCustom);
+
+  // apply/cancel
+  $('dp-apply-btn').addEventListener('click',()=>{
+    if(pFrom&&pTo){dFrom=pFrom;dTo=pTo;}
+    dpUpdCmp();dpUpdLabel();dpClose();load();
+  });
+  $('dp-cancel-btn').addEventListener('click',dpClose);
+
+  // fetch button
+  $('fetch-btn').addEventListener('click',doFetch);
+
+  dpUpdLabel();
+}
+
+function dpOpen(){
+  dpIsOpen=true;
+  $('dp-dd').classList.add('open');
   dpRenderPresets();
 }
 
-function dpUpdCmp(){
-  if(!$('cmp-on').checked){cFrom=cTo='';$('cmp-range-lbl').textContent='';return;}
-  const c=cmpRange(dFrom,dTo,$('cmp-sel').value);
-  cFrom=c.cf; cTo=c.ct;
-  $('cmp-range-lbl').textContent=fmtRng(cFrom,cTo);
+function dpClose(){
+  dpIsOpen=false;
+  $('dp-dd').classList.remove('open');
 }
 
-function dpCmpChange(){dpUpdCmp();dpUpdLabel();}
-
 function dpUpdLabel(){
-  $('dp-label').textContent=PRESETS.find(p=>p.k===dpPreset)?.l||fmtRng(dFrom,dTo);
+  const lbl=dpPreset==='custom'?(dFrom===dTo?fmtL(dFrom):fmtR(dFrom,dTo)):PRESETS.find(p=>p.k===dpPreset)?.l||fmtR(dFrom,dTo);
+  $('dp-label').textContent=lbl;
+}
+
+function dpUpdCmp(){
+  const on=$('cmp-on').checked;
+  const mode=$('cmp-sel').value;
+  const customRow=$('cmp-custom-row');
+  const autoLbl=$('cmp-auto-lbl');
+
+  if(!on){cFrom=cTo='';autoLbl.textContent='';customRow.classList.remove('visible');return;}
+
+  if(mode==='custom'){
+    customRow.classList.add('visible');
+    autoLbl.textContent='';
+    dpUpdCmpCustom();
+  } else {
+    customRow.classList.remove('visible');
+    const c=calcCmp(dFrom,dTo,mode);
+    cFrom=c.cf;cTo=c.ct;
+    autoLbl.textContent=fmtR(cFrom,cTo);
+  }
+}
+
+function dpUpdCmpCustom(){
+  const f=$('cmp-from-input').value;
+  const t=$('cmp-to-input').value;
+  if(f&&t){cFrom=f;cTo=t;}
+  else if(f){cFrom=cTo=f;}
 }
 
 function dpRenderPresets(){
   $('dp-presets').innerHTML=PRESETS.map(p=>`
-    <div class="dp-preset${p.k===dpPreset?' sel':''}" onclick="dpSelPreset('${p.k}')">${p.l}</div>
-  `).join('');
-}
+    <div class="dp-preset${p.k===dpPreset?' sel':''}" data-key="${p.k}">
+      ${p.l}
+      <div class="dp-preset-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="2"><polyline points="1.5 5 4 7.5 8.5 2.5"/></svg></div>
+    </div>`).join('');
 
-function dpSelPreset(k){
-  dpPreset=k;
-  dpRenderPresets();
-  if(k==='custom'){
-    $('dp-right').style.display='block';
-    dpRenderCals();
-  } else {
-    $('dp-right').style.display='none';
-    const r=presetRange(k);
-    pFrom=r.f; pTo=r.t;
-    dFrom=r.f; dTo=r.t;
-    dpUpdCmp(); dpUpdLabel();
-  }
-}
-
-function dpToggle(){
-  const dd=$('dp-dd');
-  dd.classList.contains('open')?dpClose():dd.classList.add('open');
-}
-
-function dpClose(){$('dp-dd').classList.remove('open');}
-
-function dpApply(){
-  if(dpPreset==='custom'&&pFrom&&pTo){dFrom=pFrom;dTo=pTo;}
-  dpUpdCmp(); dpUpdLabel(); dpClose(); load();
+  $('dp-presets').querySelectorAll('.dp-preset').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const k=el.dataset.key;
+      dpPreset=k;
+      dpRenderPresets();
+      if(k==='custom'){
+        $('dp-cal-side').classList.add('visible');
+        $('dp-footer').style.display='flex';
+        pFrom=null;pTo=null;
+        dpRenderCals();
+        $('dp-cal-info').textContent='Выбери начальную дату';
+      } else {
+        $('dp-cal-side').classList.remove('visible');
+        $('dp-footer').style.display='none';
+        const r=presetRange(k);
+        dFrom=r.f;dTo=r.t;pFrom=r.f;pTo=r.t;
+        dpUpdCmp();dpUpdLabel();
+        dpClose();load();
+      }
+    });
+  });
 }
 
 function dpRenderCals(){
-  const el=$('dp-months'); el.innerHTML='';
+  const el=$('dp-months');el.innerHTML='';
   for(let i=0;i<2;i++){
-    let y=dpViewY,m=dpViewM+i;
+    let y=dpVY,m=dpVM+i;
     if(m>11){m-=12;y++;}
-    el.appendChild(dpMonthEl(y,m));
+    el.appendChild(dpMonEl(y,m));
   }
 }
 
-function dpMonthEl(year,month){
+function dpMonEl(year,month){
   const wrap=document.createElement('div');
   wrap.className='dp-mon';
   const first=new Date(year,month,1);
   const last=new Date(year,month+1,0).getDate();
-  let dow=first.getDay(); if(dow===0)dow=7; dow--;
+  let dow=first.getDay();if(dow===0)dow=7;dow--;
   const today=isoD(new Date());
-  let html=`<div class="dp-mon-name">${RUM[month]} ${year}</div>`;
+  let html=`<div class="dp-mon-hdr">
+    <button class="dp-nav" onclick="dpNavMonth(-1)">‹</button>
+    <div class="dp-mon-name">${RUM[month]} ${year}</div>
+    <button class="dp-nav" onclick="dpNavMonth(1)">›</button>
+  </div>`;
   html+=`<div class="dp-wds">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d=>`<div class="dp-wd">${d}</div>`).join('')}</div>`;
   html+=`<div class="dp-days">`;
-  for(let i=0;i<dow;i++)html+=`<div class="dp-d dp-empty"></div>`;
+  for(let i=0;i<dow;i++) html+=`<div class="dp-d dp-empty"></div>`;
   for(let d=1;d<=last;d++){
     const iso=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     let cls='dp-d';
-    if(iso===pFrom) cls+=' range-start';
-    else if(iso===pTo) cls+=' range-end';
-    else if(pFrom&&pTo&&iso>pFrom&&iso<pTo) cls+=' in-range';
+    if(pFrom&&pTo){
+      if(iso===pFrom&&iso===pTo) cls+=' range-s range-e';
+      else if(iso===pFrom) cls+=' range-s';
+      else if(iso===pTo) cls+=' range-e';
+      else if(iso>pFrom&&iso<pTo) cls+=' in-range';
+    } else if(pFrom&&iso===pFrom) cls+=' range-s range-e';
     if(iso===today) cls+=' dp-today';
-    html+=`<div class="${cls}" onclick="dpPickDay('${iso}')">${d}</div>`;
+    html+=`<div class="${cls}" data-iso="${iso}">${d}</div>`;
   }
   html+=`</div>`;
   wrap.innerHTML=html;
+
+  wrap.querySelectorAll('.dp-d[data-iso]').forEach(el=>{
+    el.addEventListener('click',()=>dpPickDay(el.dataset.iso));
+  });
   return wrap;
 }
 
-function dpPickDay(iso){
-  if(!pFrom||(pFrom&&pTo)){pFrom=iso;pTo=null;}
-  else{pTo=iso<pFrom?(()=>{const t=pFrom;pFrom=iso;return t;})():iso;}
-  if(pFrom&&!pTo) pTo=pFrom;
+function dpNavMonth(dir){
+  dpVM+=dir;
+  if(dpVM>11){dpVM=0;dpVY++;}
+  if(dpVM<0){dpVM=11;dpVY--;}
   dpRenderCals();
 }
 
-document.addEventListener('click',e=>{
-  if(!$('dp-wrap').contains(e.target)) dpClose();
-});
+function dpPickDay(iso){
+  if(!pFrom||pTo){
+    pFrom=iso;pTo=null;
+    $('dp-cal-info').textContent='Теперь выбери конечную дату';
+  } else {
+    if(iso<pFrom){pTo=pFrom;pFrom=iso;}
+    else pTo=iso;
+    $('dp-cal-info').textContent=`${fmtL(pFrom)} — ${fmtL(pTo)}`;
+  }
+  dpRenderCals();
+}
+
+document.addEventListener('click',()=>{ if(dpIsOpen) dpClose(); });
 
 function pct(a,b){return b===0?null:(a-b)/b;}
 function fmtD(d,m){
-  if(d===null)return '<span class="dne">—</span>';
+  if(d===null)return'<span class="dne">—</span>';
   const p=(d*100).toFixed(1),s=d>=0?'+':'';
   const bad=['cpc','cpa','spend'].includes(m)?d>0:d<0;
   const cls=Math.abs(d)>.25?(bad?'dbd':'dok'):Math.abs(d)>.10?(bad?'dwn':'dok'):'dne';
-  return `<span class="${cls}">${s}${p}%</span>`;
+  return`<span class="${cls}">${s}${p}%</span>`;
 }
 function fM(v){return'$'+v.toFixed(2);}
 function fP(v){return v.toFixed(2)+'%';}
@@ -346,10 +432,10 @@ function fP(v){return v.toFixed(2)+'%';}
 async function loadClients(){
   try{
     clients=await fetch('/api/clients').then(r=>r.json());
-    if(clients.error){throw new Error(clients.error);}
+    if(clients.error) throw new Error(clients.error);
     $('client-list').innerHTML=clients.length
-      ? clients.map(c=>`<div class="client-item" onclick="selClient('${c.id}')" id="ci-${c.id}"><div class="dot"></div>${c.name}</div>`).join('')
-      : '<div style="padding:12px;font-size:12px;color:var(--muted)">Нет клиентов</div>';
+      ?clients.map(c=>`<div class="client-item" onclick="selClient('${c.id}')" id="ci-${c.id}"><div class="dot"></div>${c.name}</div>`).join('')
+      :'<div style="padding:12px;font-size:12px;color:var(--muted)">Нет клиентов</div>';
     if(clients.length) selClient(clients[0].id);
   }catch(e){
     $('client-list').innerHTML=`<div style="padding:12px;font-size:12px;color:red">Ошибка: ${e.message}</div>`;
@@ -359,16 +445,15 @@ async function loadClients(){
 function selClient(id){
   active=clients.find(c=>c.id===id);
   document.querySelectorAll('.client-item').forEach(el=>el.classList.remove('active'));
-  const el=$(`ci-${id}`); if(el) el.classList.add('active');
+  const el=$(`ci-${id}`);if(el)el.classList.add('active');
   $('page-title').textContent=active.name;
-  activeCh='all'; load();
+  activeCh='all';load();
 }
 
 async function load(){
   if(!active||!dFrom) return;
-  const url=`/api/clients/${active.id}/summary?date_from=${dFrom}&date_to=${dTo}&compare_from=${cFrom}&compare_to=${cTo}`;
-  const s=await fetch(url).then(r=>r.json());
-  renderSum(s); renderTabs(s); renderContent(s);
+  const s=await fetch(`/api/clients/${active.id}/summary?date_from=${dFrom}&date_to=${dTo}&compare_from=${cFrom}&compare_to=${cTo}`).then(r=>r.json());
+  renderSum(s);renderTabs(s);renderContent(s);
 }
 
 function renderSum(s){
@@ -377,10 +462,10 @@ function renderSum(s){
   const cpa=t.leads>0?t.spend/t.leads:0,ctr=t.impressions>0?t.clicks/t.impressions*100:0;
   $('sum-metrics').innerHTML=[
     {l:'Расход',v:fM(t.spend),d:pct(t.spend,p.spend),m:'spend'},
-    {l:'Клики', v:t.clicks.toLocaleString(),d:pct(t.clicks,p.clicks),m:'clicks'},
-    {l:'CTR',   v:fP(ctr),d:null,m:'ctr'},
-    {l:'Лиды',  v:t.leads.toFixed(0),d:pct(t.leads,p.leads),m:'leads'},
-    {l:'CPA',   v:fM(cpa),d:null,m:'cpa'},
+    {l:'Клики',v:t.clicks.toLocaleString(),d:pct(t.clicks,p.clicks),m:'clicks'},
+    {l:'CTR',v:fP(ctr),d:null,m:'ctr'},
+    {l:'Лиды',v:t.leads.toFixed(0),d:pct(t.leads,p.leads),m:'leads'},
+    {l:'CPA',v:fM(cpa),d:null,m:'cpa'},
   ].map(c=>`<div class="mc"><div class="ml">${c.l}</div><div class="mv">${c.v}</div><div class="md">${fmtD(c.d,c.m)}</div></div>`).join('');
 }
 
@@ -402,7 +487,7 @@ async function renderContent(s){
     el.innerHTML=`<div class="card"><div class="ct">Сводка по каналам</div>`+
       s.channels.map(ch=>{
         const y=ch.today,p=ch.compare;
-        return `<div class="chb"><div class="chh">${ch.channel_icon} ${ch.channel_name}</div><div class="chm">`+
+        return`<div class="chb"><div class="chh">${ch.channel_icon} ${ch.channel_name}</div><div class="chm">`+
           [['Расход',fM(y.spend),pct(y.spend,p.spend),'spend'],['CTR',fP(y.ctr),pct(y.ctr,p.ctr),'ctr'],
            ['CPC',fM(y.cpc),pct(y.cpc,p.cpc),'cpc'],['CPM',fM(y.cpm),null,'cpm'],
            ['Лиды',y.leads.toFixed(0),pct(y.leads,p.leads),'leads'],['CPA',fM(y.cpa),null,'cpa']].map(([l,v,d,m])=>
@@ -418,7 +503,7 @@ async function renderContent(s){
       rows=`<table><thead><tr><th>Кампания</th><th>Расход</th><th>CTR</th><th>CPC</th><th>CPM</th><th>Лиды</th><th>CPA</th><th>Статус</th></tr></thead><tbody>`+
         camps.campaigns.map(({today:c,compare:cp})=>{
           const bad=['spend','ctr','cpc','leads'].some(m=>{const d=pct(c[m],cp[m]);return d!==null&&(['cpc','spend'].includes(m)?d>.25:d<-.20);});
-          return `<tr><td>${bad?'🔴':''} ${c.name}</td><td>${fM(c.spend)} ${fmtD(pct(c.spend,cp.spend),'spend')}</td>
+          return`<tr><td>${bad?'🔴':''} ${c.name}</td><td>${fM(c.spend)} ${fmtD(pct(c.spend,cp.spend),'spend')}</td>
             <td>${fP(c.ctr)} ${fmtD(pct(c.ctr,cp.ctr),'ctr')}</td><td>${fM(c.cpc)} ${fmtD(pct(c.cpc,cp.cpc),'cpc')}</td>
             <td>${fM(c.cpm)}</td><td>${c.leads.toFixed(0)} ${fmtD(pct(c.leads,cp.leads),'leads')}</td>
             <td>${fM(c.cpa)}</td><td><span class="badge ${bad?'bbd':'bok'}">${bad?'Аномалия':'Норма'}</span></td></tr>`;}).join('')+`</tbody></table>`;
@@ -432,64 +517,59 @@ async function renderContent(s){
   }
 }
 
-function getToken(){if(!token)token=prompt('Admin token:');return token;}
+function getToken(){if(!tok)tok=prompt('Admin token:');return tok;}
 
 async function doFetch(){
-  const btn=$('fetch-btn'),tok=getToken(); if(!tok) return;
-  btn.textContent='⏳ Загружаю...'; btn.disabled=true;
+  const btn=$('fetch-btn'),t=getToken();if(!t)return;
+  btn.textContent='⏳ Загружаю...';btn.disabled=true;
   const bar=$('pbar'),fill=$('pfill');
-  bar.style.display='block'; fill.style.width='5%';
+  bar.style.display='block';fill.style.width='5%';
   try{
     const r=await fetch('/api/fetch',{
       method:'POST',
-      headers:{'X-Admin-Token':tok,'Content-Type':'application/json'},
+      headers:{'X-Admin-Token':t,'Content-Type':'application/json'},
       body:JSON.stringify({date_from:dFrom,date_to:dTo,compare_from:cFrom,compare_to:cTo})
     });
-    if(!r.ok){token=null;btn.textContent='✗ Ошибка';btn.disabled=false;bar.style.display='none';return;}
+    if(!r.ok){tok=null;btn.textContent='✗ Ошибка';btn.disabled=false;bar.style.display='none';return;}
     const {job_id,total}=await r.json();
     const poll=setInterval(async()=>{
       const st=await fetch(`/api/fetch_status/${job_id}`).then(r=>r.json());
       fill.style.width=`${Math.round(((st.done||0)/Math.max(total||1,1))*100)}%`;
       if(st.status==='done'){
-        clearInterval(poll);
-        bar.style.display='none';
-        btn.textContent='✓ Готово'; btn.disabled=false;
-        await load();
-        setTimeout(()=>btn.textContent='⟳ Обновить',2000);
+        clearInterval(poll);bar.style.display='none';
+        btn.textContent='✓ Готово';btn.disabled=false;
+        await load();setTimeout(()=>btn.textContent='⟳ Обновить',2000);
       }
     },1500);
   }catch(e){btn.textContent='✗ Ошибка';btn.disabled=false;bar.style.display='none';}
 }
 
 function tgOpen(){
-  if(!active) return;
-  $('tg-period').textContent=`${fmtRng(dFrom,dTo)}${cFrom?` vs ${fmtRng(cFrom,cTo)}`:''}`;
+  if(!active)return;
+  $('tg-period').textContent=`${fmtR(dFrom,dTo)}${cFrom?` vs ${fmtR(cFrom,cTo)}`:''}`;
   $('tg-sections').innerHTML=[
     {k:'summary',l:'📊 Сводка (все каналы)',c:true},
     ...active.channels.map(ch=>({k:ch.key+'_campaigns',l:`${ch.icon} ${ch.name} — по кампаниям`,c:false}))
   ].map(s=>`<label class="chkitem"><input type="checkbox" value="${s.k}" ${s.c?'checked':''}>${s.l}</label>`).join('');
   $('tg-modal').classList.add('open');
 }
-
 function tgClose(){$('tg-modal').classList.remove('open');}
-
 async function tgSend(){
-  const tok=getToken(); if(!tok) return;
+  const t=getToken();if(!t)return;
   const btn=$('tg-send-btn');
   const secs=[...$('tg-sections').querySelectorAll('input:checked')].map(i=>i.value);
   if(!secs.length){alert('Выбери хотя бы один раздел');return;}
-  btn.textContent='⏳ Отправляю...'; btn.disabled=true;
+  btn.textContent='⏳ Отправляю...';btn.disabled=true;
   try{
     const r=await fetch('/api/send_telegram',{
       method:'POST',
-      headers:{'X-Admin-Token':tok,'Content-Type':'application/json'},
+      headers:{'X-Admin-Token':t,'Content-Type':'application/json'},
       body:JSON.stringify({client_id:active.id,date_from:dFrom,date_to:dTo,compare_from:cFrom,compare_to:cTo,sections:secs})
     });
     if(r.ok){btn.textContent='✓ Отправлено';setTimeout(tgClose,1500);}
-    else{token=null;btn.textContent='✗ Ошибка';}
+    else{tok=null;btn.textContent='✗ Ошибка';}
   }catch(e){btn.textContent='✗ Ошибка';}
-  btn.disabled=false;
-  setTimeout(()=>btn.textContent='Отправить',3000);
+  btn.disabled=false;setTimeout(()=>btn.textContent='Отправить',3000);
 }
 
 dpInit();
